@@ -1,0 +1,453 @@
+$dark-bg: #0f0f13;
+$neon-blue: #00f3ff;
+$neon-pink: #bc13fe;
+$neon-red: #ff2a2a;
+$neon-yellow: #f0db4f;
+$neon-green: #39ff14;
+$glass: rgba(255, 255, 255, 0.05);
+
+:host {
+  font-family: 'Orbitron', sans-serif;
+  color: white;
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  background: radial-gradient(circle at center, #1a1a24 0%, $dark-bg 100%);
+  overflow: hidden;
+}
+
+/* --- Global Reset --- */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+* {
+  box-sizing: border-box;
+}
+
+/* --- Container --- */
+.game-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Welcome Screen --- */
+.welcome-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .main-title {
+    font-size: 3.5rem;
+    line-height: 1.2;
+    text-align: center;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 20px $neon-blue;
+    color: white;
+
+    .subtitle {
+      display: block;
+      font-size: 1.2rem;
+      color: whitesmoke; /* Distinct color for name */
+      letter-spacing: 3px;
+      margin-top: 15px;
+      text-shadow: 0 0 10px whitesmoke;
+    }
+  }
+
+  .input-group {
+    display: flex;
+    gap: 15px;
+
+    input {
+      background: $glass;
+      border: 2px solid $neon-blue;
+      padding: 15px 30px;
+      color: white;
+      font-family: 'Orbitron';
+      font-size: 1.5rem;
+      border-radius: 8px;
+      outline: none;
+      width: 300px;
+      text-align: center;
+      transition: 0.3s;
+
+      &:focus {
+        box-shadow: 0 0 20px $neon-blue;
+        transform: scale(1.05);
+      }
+    }
+
+    button {
+      background: $neon-blue;
+      border: none;
+      padding: 0 40px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: $dark-bg;
+      cursor: pointer;
+      clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+      transition:
+        transform 0.2s,
+        filter 0.2s;
+
+      &:hover {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 10px $neon-blue);
+      }
+    }
+  }
+}
+
+/* --- Arena --- */
+.arena {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  gap: 20px;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.hud-panel {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+
+  h3 {
+    border-bottom: 2px solid $neon-blue;
+    padding-bottom: 10px;
+    margin: 0 0 15px 0;
+    color: $neon-blue;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+}
+
+.leaderboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 40vh;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $neon-blue;
+    border-radius: 5px;
+  }
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 1.1rem;
+
+    .rank {
+      color: $neon-pink;
+      font-weight: bold;
+      width: 40px;
+    }
+    .name {
+      flex-grow: 1;
+      text-align: left;
+    }
+    .score {
+      color: $neon-blue;
+      font-weight: bold;
+    }
+  }
+  .empty {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+  }
+}
+
+.stats {
+  .stat-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+
+    label {
+      color: #888;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+    .value {
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+    .urgent {
+      color: $neon-red;
+      animation: pulse 1s infinite;
+      text-shadow: 0 0 15px $neon-red;
+    }
+  }
+
+  .timer-box {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    .value {
+      align-self: flex-end;
+    }
+
+    .progress-bar-bg {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: $neon-green;
+      box-shadow: 0 0 10px $neon-green;
+      transition:
+        width 1s linear,
+        background 0.3s;
+      &.warning {
+        background: $neon-yellow;
+        box-shadow: 0 0 10px $neon-yellow;
+      }
+      &.danger {
+        background: $neon-red;
+        box-shadow: 0 0 10px $neon-red;
+      }
+    }
+  }
+}
+
+.quit-btn {
+  background: transparent;
+  border: 2px solid $neon-red;
+  color: $neon-red;
+  padding: 15px;
+  font-family: 'Orbitron';
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: auto;
+  transition: 0.3s;
+  border-radius: 5px;
+  &:hover {
+    background: $neon-red;
+    color: white;
+    box-shadow: 0 0 20px $neon-red;
+  }
+}
+
+/* --- Main Stage --- */
+.main-stage {
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5vh;
+  width: 85vh;
+  height: 85vh;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  perspective: 1000px;
+}
+
+.card-container {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 4rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+  }
+
+  .front {
+    background: linear-gradient(135deg, #2b2b3b, #1a1a24);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.1);
+    &:hover {
+      border-color: $neon-blue;
+      color: $neon-blue;
+      box-shadow: 0 0 15px $neon-blue;
+    }
+  }
+
+  .back {
+    background: #15151e;
+    transform: rotateY(180deg);
+    border: 3px solid;
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9);
+    text-shadow: 0 0 10px currentColor;
+    transition: 0.3s;
+  }
+
+  /* Error Glow handled by class */
+  .back.error-glow {
+    box-shadow:
+      inset 0 0 50px rgba(255, 42, 42, 0.5),
+      0 0 20px $neon-red;
+  }
+}
+
+/* --- Overlay --- */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px);
+
+  .modal {
+    background: linear-gradient(135deg, #1a1a24, #000);
+    padding: 50px;
+    border: 2px solid $neon-blue;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 0 50px $neon-blue;
+    min-width: 400px;
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    h2.win {
+      color: #0f0;
+      text-shadow: 0 0 20px #0f0;
+    }
+    h2.lose {
+      color: #f00;
+      text-shadow: 0 0 20px #f00;
+    }
+
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      color: white;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    button {
+      padding: 15px 40px;
+      background: $neon-blue;
+      color: #000;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 5px;
+      transition: 0.3s;
+
+      &:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px $neon-blue;
+      }
+      &:last-child {
+        background: #333;
+        color: white;
+        &:hover {
+          background: #555;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 900px) {
+  .arena {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+  }
+  .hud-panel {
+    flex: 1;
+    margin: 0;
+  }
+  .quit-btn {
+    margin: 0;
+  }
+  .card-grid {
+    width: 90vw;
+    height: 90vw;
+  }
+}
