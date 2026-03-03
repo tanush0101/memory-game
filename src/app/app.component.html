@@ -70,15 +70,7 @@
         <div class="card-container" *ngFor="let card of cards" (click)="flipCard(card)">
           <div
             class="card"
-            [@cardFlip]="
-              card.matched
-                ? 'matched'
-                : card.mismatch
-                  ? 'mismatch'
-                  : card.flipped
-                    ? 'flipped'
-                    : 'default'
-            "
+            [@cardFlip]="card.matched ? 'matched' : (card.mismatch ? 'mismatch' : (card.flipped ? 'flipped' : 'default'))"
           >
             <div class="face front">
               <i class="fa-solid fa-microchip"></i>
@@ -87,8 +79,8 @@
             <div
               class="face back"
               [class.error-glow]="card.mismatch"
-              [style.color]="card.mismatch ? 'red' : card.color"
-              [style.border-color]="card.mismatch ? 'red' : card.color"
+              [style.color]="card.matched ? '#39ff14' : (card.mismatch ? 'red' : card.color)"
+              [style.border-color]="card.matched ? '#39ff14' : (card.mismatch ? 'red' : card.color)"
             >
               <i [class]="card.icon"></i>
             </div>

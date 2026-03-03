@@ -1,14 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
-/* Global Reset */
+/* Global Reset for Scrolling */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Disables scrollbar completely */
-  background: #0f0f13; /* Matches game bg */
+  overflow: hidden;
+  background: #0f0f13;
 }
 
 * {
-  box-sizing: border-box; /* Ensures padding doesn't add to width */
+  box-sizing: border-box;
 }

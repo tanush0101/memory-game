@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
 
 interface Card {
@@ -8,7 +10,6 @@ interface Card {
   matched: boolean;
   mismatch: boolean;
   color: string;
-  originalColor: string; // Store original brand color to restore if needed (though matched stays green)
 }
 
 interface Player {
@@ -19,9 +20,10 @@ interface Player {
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.html',
-  standalone: false,
-  styleUrl: './app.scss',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
   animations: [
     trigger('slideIn', [
       transition(':enter', [
@@ -44,13 +46,10 @@ interface Player {
     trigger('cardFlip', [
       state('default', style({ transform: 'rotateY(0)' })),
       state('flipped', style({ transform: 'rotateY(180deg)' })),
-      state('matched', style({ transform: 'rotateY(180deg)' })), // Matched stays flipped
-      state('mismatch', style({ transform: 'rotateY(180deg)' })), // Mismatch stays flipped (briefly)
-
+      state('matched', style({ transform: 'rotateY(180deg)' })),
+      state('mismatch', style({ transform: 'rotateY(180deg)' })),
       transition('default => flipped', [animate('300ms ease-in')]),
       transition('flipped => default', [animate('300ms ease-out')]),
-
-      // Shake animation for mismatch
       transition('* => mismatch', [
         animate(
           '0.5s',
@@ -67,13 +66,12 @@ interface Player {
     ]),
   ],
 })
-export class App implements OnInit {
+export class AppComponent implements OnInit {
   playerName: string = '';
   gameStarted: boolean = false;
   gameOver: boolean = false;
   victory: boolean = false;
 
-  // 90 Seconds Timer
   readonly TOTAL_TIME = 90;
   timeLeft: number = 90;
   timerInterval: any;
@@ -124,7 +122,6 @@ export class App implements OnInit {
         id: index,
         icon: item.icon,
         color: item.color,
-        originalColor: item.color, // Save original color
         flipped: false,
         matched: false,
         mismatch: false,
@@ -133,7 +130,6 @@ export class App implements OnInit {
 
   flipCard(card: Card) {
     if (this.lockBoard || card.flipped || card.matched || this.gameOver) return;
-
     card.flipped = true;
     this.flippedCards.push(card);
 
@@ -147,23 +143,14 @@ export class App implements OnInit {
     const [card1, card2] = this.flippedCards;
 
     if (card1.icon === card2.icon) {
-      // --- MATCH ---
       card1.matched = true;
       card2.matched = true;
-
-      // CHANGE COLOR TO GREEN FOR BORDER
-      card1.color = '#39ff14'; // Neon Green
-      card2.color = '#39ff14'; // Neon Green
-
       this.flippedCards = [];
       this.lockBoard = false;
       this.checkVictory();
     } else {
-      // --- MISMATCH ---
       card1.mismatch = true;
       card2.mismatch = true;
-
-      // Wait 1 second (Live Red Border) then unflip
       setTimeout(() => {
         card1.flipped = false;
         card2.flipped = false;
